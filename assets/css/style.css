@@ -7,7 +7,7 @@ body {
 }
 
 .tc-jumbotron {
-    height: 60em;  
+/*    height: 60em;   */
     background-color: crimson;
     color: yellow;
 }
@@ -23,4 +23,24 @@ body {
 
 .qform h2 {
     color: white;
+}
+
+#timer {
+    text-align: right;
+    font-size: 1.2em;
+}
+
+#buttons, #endbutton {               
+  text-align: center;    
+  color: black;          
+}                        
+
+button {
+  margin-top: 50px;
+  margin-bottom: 30px;
+  
+  width: 100px;
+
+  /* Box-model */
+  height: 50px;
 }

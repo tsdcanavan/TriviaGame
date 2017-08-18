@@ -2,20 +2,78 @@ var correct=0;
 var wrong=0;
 var unanswered=0;
 var answers = [];
+var intervalId;
+var clockRunning=false;
+var time=120;
+var addHtml;
+
+  function timeConverter(t) {
+    //  Takes the current time in seconds and convert it to minutes and seconds (mm:ss).
+    var minutes = Math.floor(t / 60);
+    var seconds = t - (minutes * 60);
+
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+
+    if (minutes === 0) {
+      minutes = "00";
+    }
+
+    else if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+
+    return minutes + ":" + seconds;
+  }
 
 function loadHeader() {
   console.log("header loading...");
 // load the jumbotron - love the jumbotron
-  var addHtml = $("<h1>");
+  addHtml = $("<h1>");
   addHtml.text("MLS Trivia");
   addHtml.addClass("text-center tc-text-center");
   $("#jumbo").html(addHtml);
+
   addHtml = $("<h3>");
   addHtml.text("(The league, not the realtors)");
   addHtml.addClass("text-center tc-text-center");
   $("#jumbo").append(addHtml);
+
+  addHtml=$("<div>");
+  addHtml.attr("id","timer");
+  addHtml.text("Time remaining: " + timeConverter(time));
+  $("#jumbo").append(addHtml);
+  
   $("#jumbo").append("<hr>");
+  
 }
+
+function loadDoneButton() {
+console.log("loading done button...");
+  addHtml=$("<div>");
+  addHtml.attr("id","endbutton");
+  $("#jumbo").append(addHtml);
+
+  addHtml=$("<button>");
+  addHtml.attr("id","done");
+  addHtml.text("DONE");
+  $("#endbutton").append(addHtml);
+}
+
+
+function loadStartButton() {
+console.log("loading start button...");
+  addHtml=$("<div>");
+  addHtml.attr("id","buttons");
+  $("#jumbo").append(addHtml);
+
+  addHtml=$("<button>");
+  addHtml.attr("id","start");
+  addHtml.text("START");
+  $("#buttons").append(addHtml);
+}
+
 
 function loadScreen () {
   console.log("screen loading...");
@@ -220,10 +278,27 @@ function loadQuestions() {
 
 }
 
-function startGame () {
-//    setTimeout
-console.log(" ");
+function count() {
+    //  TODO: increment time by 1, remember we cant use "this" here.
+    time--;
+    //  TODO: Get the current time, pass that into the stopwatch.timeConverter function,
+    //        and save the result in a variable.
+  if (time > 0) {
+    var timeDisplay = timeConverter(time);
+    //  TODO: Use the variable you just created to show the converted time in the "display" div.
+    console.log(timeDisplay);
+    $("#timer").html("Time: " + timeDisplay);
+  } else {
+    finalTotals();
   }
+}
+function startGame () {
+console.log("running startGame... ");
+  if (!clockRunning) {
+    intervalId = setInterval(count,1000);
+    clockRunning = true;
+  }
+}
 
 function finalTotals () {
   for (var i=0; i<answers.length; i++) {
@@ -253,15 +328,26 @@ function finalTotals () {
   $(".qform").append(addHtml);
   addHtml= $("<hr>");
   $(".qform").append(addHtml);
- 
-  console.log(correct);
-  console.log(wrong);
-  console.log(unanswered);
+
+  clearInterval(intervalId);
+  clockRunning=false;
 }
   
   loadHeader();
-  loadScreen();
-  loadQuestions();
+  loadStartButton();
+
+
+//  loadScreen();
+//  loadQuestions();
+//  This code will run as soon as the page loads.
+window.onload = function() {
+console.log("waiting on click?...");
+  $("#start").click(function() {
+    loadHeader();
+    loadScreen();
+    loadQuestions();
+    loadDoneButton();
+    startGame();
 
 
   for (var i= 0; i<10; i++) {
@@ -310,3 +396,5 @@ console.log(answers);
   });
 
 console.log(answers);
+  });
+};
