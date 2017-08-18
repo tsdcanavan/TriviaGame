@@ -1,0 +1,26 @@
+body {
+	background-color: powderblue;
+    background-image: url("../img/MLS_original.png");
+    background-attachment: fixed;
+    font-family: 'Acme', sans-serif; 
+    font-size: 1.5em;
+}
+
+.tc-jumbotron {
+    height: 60em;  
+    background-color: crimson;
+    color: yellow;
+}
+
+.tc-text-center {
+	margin-top: -20px;
+} 
+
+.qform {
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.qform h2 {
+    color: white;
+}
