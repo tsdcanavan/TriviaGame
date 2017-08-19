@@ -287,7 +287,7 @@ function count() {
     var timeDisplay = timeConverter(time);
     //  TODO: Use the variable you just created to show the converted time in the "display" div.
     console.log(timeDisplay);
-    $("#timer").html("Time: " + timeDisplay);
+    $("#timer").html("Time remaining: " + timeDisplay);
   } else {
     finalTotals();
   }
@@ -298,6 +298,11 @@ console.log("running startGame... ");
     intervalId = setInterval(count,1000);
     clockRunning = true;
   }
+}
+
+function stopGame() {
+  clearInterval(intervalId);
+  clockRunning=false;
 }
 
 function finalTotals () {
@@ -328,9 +333,7 @@ function finalTotals () {
   $(".qform").append(addHtml);
   addHtml= $("<hr>");
   $(".qform").append(addHtml);
-
-  clearInterval(intervalId);
-  clockRunning=false;
+  stopGame();
 }
   
   loadHeader();
@@ -343,11 +346,16 @@ function finalTotals () {
 window.onload = function() {
 console.log("waiting on click?...");
   $("#start").click(function() {
+
     loadHeader();
     loadScreen();
     loadQuestions();
     loadDoneButton();
     startGame();
+
+    $("#done").click(function() {
+      finalTotals();
+    })
 
 
   for (var i= 0; i<10; i++) {
@@ -392,7 +400,6 @@ console.log(answers);
   $("#q9form").click(function() {
     answers[9]=q9form.Q1.value;
 console.log(answers);
-    finalTotals();
   });
 
 console.log(answers);
