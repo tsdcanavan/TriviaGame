@@ -44,10 +44,16 @@ function timeConverter(t) {
 function loadHeader() {
   console.log("header loading...");
 // load the jumbotron - love the jumbotron
+
+  addHtml=$("<div>");
+  addHtml.attr("id","version");
+  addHtml.text("v2.0");
+  $("#jumbo").html(addHtml);
+  
   addHtml = $("<h1>");
   addHtml.text("MLS Trivia");
   addHtml.addClass("text-center tc-text-center");
-  $("#jumbo").html(addHtml);
+  $("#jumbo").append(addHtml);
 
   addHtml = $("<h3>");
   addHtml.text("(The league, not the realtors)");
@@ -60,6 +66,10 @@ function loadHeader() {
   $("#jumbo").append(addHtml);
   
   $("#jumbo").append("<hr>");
+
+  $(document).ready(function(){
+    $(this).scrollTop(0);
+});
   
 }
 
@@ -363,6 +373,7 @@ function finalTotals () {
     correct=0;
     wrong=0;
     unanswered=0;
+    loadHeader();
     runGame();
     console.log("start clicked...");
   });
