@@ -1,0 +1,11 @@
+functions -
+timeConverter		format the time for display
+loadHeader			load the jumbotron, the game title, and the timer
+loadStartButton		on the first load, this button is loaded to start the game
+loadDoneButton		on the click of the start button, this is loaded at the bottom of the questions list
+loadScreen			load the basic shell for the questions, setup the html tags to place the questions in
+loadQuestions		load up all the questions into the screen
+runGame				combine the functions to  load  the screen and start running the game
+startGame			start the interval timer for the game
+stopGame			stop the interval timer for the game
+finalTotals			display the totals and allow for a restart of the game

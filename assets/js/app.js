@@ -7,7 +7,21 @@ var clockRunning=false;
 var time=120;
 var addHtml;
 
-  function timeConverter(t) {
+function count() {
+  //  count down timer for the game
+  time--;
+
+  if (time > 0) {
+    var timeDisplay = timeConverter(time);
+    console.log(timeDisplay);
+    $("#timer").html("Time remaining: " + timeDisplay);
+  } else {
+    finalTotals();
+  }
+}
+
+
+function timeConverter(t) {
     //  Takes the current time in seconds and convert it to minutes and seconds (mm:ss).
     var minutes = Math.floor(t / 60);
     var seconds = t - (minutes * 60);
@@ -25,7 +39,7 @@ var addHtml;
     }
 
     return minutes + ":" + seconds;
-  }
+}
 
 function loadHeader() {
   console.log("header loading...");
@@ -51,6 +65,7 @@ function loadHeader() {
 
 function loadDoneButton() {
 console.log("loading done button...");
+  // load a button for "done"
   addHtml=$("<div>");
   addHtml.attr("id","endbutton");
   $("#jumbo").append(addHtml);
@@ -62,20 +77,23 @@ console.log("loading done button...");
 }
 
 
-function loadStartButton() {
+function loadStartButton(start) {
 console.log("loading start button...");
+  // load a button for "start"
+  var start;
   addHtml=$("<div>");
   addHtml.attr("id","buttons");
   $("#jumbo").append(addHtml);
 
   addHtml=$("<button>");
   addHtml.attr("id","start");
-  addHtml.text("START");
+  addHtml.text(start);
   $("#buttons").append(addHtml);
 }
 
 
 function loadScreen () {
+  // load the basic screen structure for  the game
   console.log("screen loading...");
   addHtml= $("<div>");
   addHtml.addClass("qform");
@@ -90,34 +108,42 @@ function loadScreen () {
   addHtml.attr("action"," ");
   addHtml.attr("id","q1form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q2form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q3form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q4form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q5form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q6form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q7form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q8form");
   $(".qform").append(addHtml);
+
   addHtml= $("<form>");
   addHtml.attr("action"," ");
   addHtml.attr("id","q9form");
@@ -126,6 +152,8 @@ function loadScreen () {
 
 function loadQuestions() {
   console.log("questions loading...")
+// load the questions 1 - 10
+// holy shit this is a lot of lines - look into loading this in less lines  
 // Question 1 ===================================================
   var addQuestion="<b>1. What year did the MLS begin play?</b><br>";
   $("#q0form").html(addQuestion);
@@ -278,22 +306,7 @@ function loadQuestions() {
 
 }
 
-function count() {
-    //  TODO: increment time by 1, remember we cant use "this" here.
-    time--;
-    //  TODO: Get the current time, pass that into the stopwatch.timeConverter function,
-    //        and save the result in a variable.
-  if (time > 0) {
-    var timeDisplay = timeConverter(time);
-    //  TODO: Use the variable you just created to show the converted time in the "display" div.
-    console.log(timeDisplay);
-    $("#timer").html("Time remaining: " + timeDisplay);
-  } else {
-    finalTotals();
-  }
-}
 function startGame () {
-console.log("running startGame... ");
   if (!clockRunning) {
     intervalId = setInterval(count,1000);
     clockRunning = true;
@@ -306,6 +319,9 @@ function stopGame() {
 }
 
 function finalTotals () {
+// when timer runs out or user presses done
+// load up the final totals and prepare to 
+// rerun the game
   for (var i=0; i<answers.length; i++) {
     if (answers[i] === "1") {
       correct++;
@@ -315,7 +331,11 @@ function finalTotals () {
       unanswered++;
     }
   }
+
+  // load the header 
   loadHeader();
+
+  //load the done screen with totals
   addHtml= $("<div>");
   addHtml.addClass("qform");
   $("#jumbo").append(addHtml);
@@ -333,31 +353,22 @@ function finalTotals () {
   $(".qform").append(addHtml);
   addHtml= $("<hr>");
   $(".qform").append(addHtml);
+  loadStartButton("Restart");
+  //stop the interval timer
   stopGame();
-}
-  
-  loadHeader();
-  loadStartButton();
 
-
-//  loadScreen();
-//  loadQuestions();
-//  This code will run as soon as the page loads.
-window.onload = function() {
-console.log("waiting on click?...");
+  // wait to see if the user wants to start again
   $("#start").click(function() {
+    time=120;
+    correct=0;
+    wrong=0;
+    unanswered=0;
+    runGame();
+    console.log("start clicked...");
+  });
+}
 
-    loadHeader();
-    loadScreen();
-    loadQuestions();
-    loadDoneButton();
-    startGame();
-
-    $("#done").click(function() {
-      finalTotals();
-    })
-
-
+function doQuestions() {
   for (var i= 0; i<10; i++) {
     answers[i]="X";
   }
@@ -401,7 +412,33 @@ console.log(answers);
     answers[9]=q9form.Q1.value;
 console.log(answers);
   });
-
 console.log(answers);
+};
+
+// all the work to run the game-
+// setup the header, list the questions
+// run the interval timer 
+function runGame() {
+    loadHeader();
+    loadScreen();
+    loadQuestions();
+    loadDoneButton();
+    startGame();
+    doQuestions();
+    $("#done").click(function() {
+      finalTotals();
+    })
+};
+
+//load the first screen for starting the game 
+// this is where things really start
+  loadHeader();
+  loadStartButton("Start");
+
+//run the game if start is pressed
+  window.onload = function() {
+    console.log("waiting on click?...");
+  $("#start").click(function() {
+    runGame();
   });
 };
